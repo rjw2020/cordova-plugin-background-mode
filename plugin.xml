@@ -324,9 +324,12 @@
 	 <source-file src="src/android/NotificationUtils.java"
             target-dir="src/de/appplant/cordova/plugin/background" />   
 	    
-	    //华为推送所需要的java文件
+	    //华为推送所需要的java文件    
 	    <source-file src="src/android/com/huawei/android/hms/agent/HMSAgent.java"
             target-dir="src/com/huawei/android/hms/agent/HMSAgent.java" />
+	    
+	    <source-file src="src/android/com/huawei/android/hms/agent/common/VvHuaWeiPushTestReceiver.java"
+            target-dir="src/com/huawei/android/hms/agent/common/VvHuaWeiPushTestReceiver.java" />
 	    
 	    <source-file src="src/android/com/huawei/android/hms/agent/common/ActivityMgr.java"
             target-dir="src/com/huawei/android/hms/agent/common/ActivityMgr.java" />  
