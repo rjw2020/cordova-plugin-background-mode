@@ -121,7 +121,7 @@ public class BackgroundMode extends CordovaPlugin {
         CrashReport.initCrashReport(this.cordova.getActivity().getApplicationContext());
         
         boolean success = HMSAgent.init(cordova.getActivity());
-        VVServer.WriteLog(cordova.getActivity(), " HMSAgent.init" + success);
+        VVServer.WriteLog(cordova.getActivity(), " HMSAgent.init：" + success);
              
         HMSAgent.connect(cordova.getActivity(), new ConnectHandler() {
             @Override
