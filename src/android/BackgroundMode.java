@@ -122,7 +122,13 @@ public class BackgroundMode extends CordovaPlugin {
         
         boolean success = HMSAgent.init(cordova.getActivity());
         VVServer.WriteLog(cordova.getActivity(), " HMSAgent.init" + success);
-        
+             
+        HMSAgent.connect(cordova.getActivity(), new ConnectHandler() {
+            @Override
+            public void onConnect(int rst) {
+                VVServer.WriteLog(cordova.getActivity(),"HMS connect end:" + rst);
+            }
+        });
         getToken();
         getPushStatus();
         setReceiveNormalMsg(true);
