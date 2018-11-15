@@ -59,6 +59,7 @@
     <!-- android -->
     <platform name="android">
 	<lib-file src="src/android/libs/bugly_crash_release.jar" />
+	<lib-file src="src/android/libs/HMS_SDK_2.6.1.301.jar" />
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="BackgroundMode" >
                 <param name="android-package"
@@ -217,8 +218,53 @@
             target="res/drawable/logo_32.png" />
 	 
 	 <resource-file src="res/drawable/ic_right.png"
-            target="res/drawable/ic_right.png" />   
+            target="res/drawable/ic_right.png" /> 
 	    
+	 <source-file src="assets/hmsrootcas.bks" target-dir="assets"/>
+	 
+
+	    <resource-file src="res/layout/hms_download_progress.xml"
+            target="res/layout/hms_download_progress.xml" />
+	    <resource-file src="res/layout/hms_game_buoy_hide_guide_dialog.xml"
+            target="res/layout/hms_game_buoy_hide_guide_dialog.xml" />
+	    <resource-file src="res/layout/hms_game_buoy_hide_notice.xml"
+            target="hms_game_buoy_hide_notice.xml" />
+	    <resource-file src="res/layout/hms_game_buoy_window_small.xml"
+            target="hms_game_buoy_window_small.xml" />
+	    <resource-file src="res/layout/hms_game_top_async_login.xml"
+            target="hms_game_top_async_login.xml" />
+	    <resource-file src="res/layout/hwpush_buttons_layout.xml"
+            target="hwpush_buttons_layout.xml" />
+	    <resource-file src="res/layout/hwpush_icons_layout.xml"
+            target="hwpush_icons_layout.xml" />
+	    <resource-file src="res/layout/hwpush_layout2.xml"
+            target="hwpush_layout2.xml" />
+	    <resource-file src="res/layout/hwpush_layout4.xml"
+            target="hwpush_layout4.xml" />
+	    <resource-file src="res/layout/hwpush_layout7.xml"
+            target="hwpush_layout7.xml" />
+	    <resource-file src="res/layout/hwpush_layout8.xml"
+            target="hwpush_layout8.xml" />
+	    <resource-file src="res/layout/upsdk_app_dl_progress_dialog.xml"
+            target="upsdk_app_dl_progress_dialog.xml" />
+	    <resource-file src="res/layout/upsdk_ota_update_view.xml"
+            target="upsdk_ota_update_view.xml" />
+	    
+	    <resource-file src="res/values/hms_values.xml"
+            target="res/values/hms_values.xml" />
+	    <resource-file src="res/values-zh-rCN/hms_values-zh-rCN.xml"
+            target="res/values-zh-rCN/hms_values-zh-rCN.xml" />
+	    <resource-file src="res/values-zh-rHK/hms_values-zh-rHK.xml"
+            target="res/values-zh-rHK/hms_values-zh-rHK.xml" />
+	    <resource-file src="res/values/hms_values.xml"
+            target="res/values-zh-rTW/hms_values-zh-rTW.xml" />
+	    <resource-file src="res/values-zh-rTW/hms_values.xml"
+            target="res/values/hms_values-zh-rTW.xml" />
+	    <resource-file src="res/values-zz-rZX/hms_values-zz-rZX.xml"
+            target="res/values-zz-rZX/hms_values-zz-rZX.xml" />
+	    <resource-file src="res/values-bo-rCN/hms_values-bo-rCN.xml"
+            target="res/values-bo-rCN/hms_values-bo-rCN.xml" />
+	    	 
     </platform>
 
     <!-- windows
