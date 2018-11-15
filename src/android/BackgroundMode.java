@@ -59,6 +59,15 @@ import com.tencent.bugly.crashreport.CrashReport;
 import static android.content.Context.BIND_AUTO_CREATE;
 import static android.content.Context.MODE_PRIVATE;
 
+//华为push导包
+import com.huawei.android.hms.agent.HMSAgent;
+import com.huawei.android.hms.agent.HMSAgent;
+import com.huawei.android.hms.agent.common.handler.ConnectHandler;
+import com.huawei.android.hms.agent.push.handler.EnableReceiveNormalMsgHandler;
+import com.huawei.android.hms.agent.push.handler.EnableReceiveNotifyMsgHandler;
+import com.huawei.android.hms.agent.push.handler.GetPushStateHandler;
+import com.huawei.android.hms.agent.push.handler.GetTokenHandler;
+
 public class BackgroundMode extends CordovaPlugin {
 
     // Event types for callbacks
@@ -111,9 +120,73 @@ public class BackgroundMode extends CordovaPlugin {
         this.mActivity = cordova.getActivity();
         this.mWebView = webView;
         CrashReport.initCrashReport(this.cordova.getActivity().getApplicationContext());
+        
+        boolean success = HMSAgent.init(this);
+        VVServer.WriteLog(cordova.getActivity(), " HMSAgent.init" + success);
+        
+        getToken();
+        getPushStatus();
+        setReceiveNormalMsg(true);
+        setReceiveNotifyMsg(true);
+        
         if(isOpenDebugModel)
             VVServer.WriteLog(cordova.getActivity(), " initialize");
         
+    }
+    
+        /**
+     * 获取token
+     */
+    private void getToken() {
+        VVServer.WriteLog(cordova.getActivity(),"get token: begin");
+        HMSAgent.Push.getToken(new GetTokenHandler() {
+            @Override
+            public void onResult(int rtnCode)//, TokenResult tokenResult) {
+            {
+                VVServer.WriteLog(cordova.getActivity(),"get token: end" + rtnCode);
+            }
+        });
+    }
+
+    /**
+     * 获取push状态 | Get Push State
+     */
+    private void getPushStatus() {
+        VVServer.WriteLog(cordova.getActivity(),"getPushState:begin");
+        HMSAgent.Push.getPushState(new GetPushStateHandler() {
+            @Override
+            public void onResult(int rst) {
+                VVServer.WriteLog(cordova.getActivity(),"getPushState:end code=" + rst);
+            }
+        });
+    }
+
+    /**
+     * 设置是否接收普通透传消息 | Set whether to receive normal pass messages
+     * @param enable 是否开启 | enabled or not
+     */
+    private void setReceiveNormalMsg(boolean enable){
+        VVServer.WriteLog(cordova.getActivity(),"enableReceiveNormalMsg:begin");
+        HMSAgent.Push.enableReceiveNormalMsg(enable, new EnableReceiveNormalMsgHandler() {
+            @Override
+            public void onResult(int rst) {
+                VVServer.WriteLog(cordova.getActivity(),"enableReceiveNormalMsg:end code=" + rst);
+            }
+        });
+    }
+
+    /**
+     * 设置接收通知消息 | Set up receive notification messages
+     * @param enable 是否开启 | enabled or not
+     */
+    private void setReceiveNotifyMsg(boolean enable){
+        VVServer.WriteLog(cordova.getActivity(),"enableReceiveNotifyMsg:begin");
+        HMSAgent.Push.enableReceiveNotifyMsg(enable, new EnableReceiveNotifyMsgHandler() {
+            @Override
+            public void onResult(int rst) {
+                VVServer.WriteLog(cordova.getActivity(),"enableReceiveNotifyMsg:end code=" + rst);
+            }
+        });
     }
     
     @Override
