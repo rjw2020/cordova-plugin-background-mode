@@ -252,16 +252,19 @@
 	    
 	    <resource-file src="res/values/hms_values.xml"
             target="res/values/hms_values.xml" />
+	    
 	    <resource-file src="res/values-zh-rCN/hms_values-zh-rCN.xml"
             target="res/values-zh-rCN/hms_values-zh-rCN.xml" />
+	    
 	    <resource-file src="res/values-zh-rHK/hms_values-zh-rHK.xml"
             target="res/values-zh-rHK/hms_values-zh-rHK.xml" />
-	    <resource-file src="res/values/hms_values.xml"
+	    
+	    <resource-file src="res/values-zh-rTW/hms_values-zh-rTW.xml"
             target="res/values-zh-rTW/hms_values-zh-rTW.xml" />
-	    <resource-file src="res/values-zh-rTW/hms_values.xml"
-            target="res/values/hms_values-zh-rTW.xml" />
+	    
 	    <resource-file src="res/values-zz-rZX/hms_values-zz-rZX.xml"
             target="res/values-zz-rZX/hms_values-zz-rZX.xml" />
+	    
 	    <resource-file src="res/values-bo-rCN/hms_values-bo-rCN.xml"
             target="res/values-bo-rCN/hms_values-bo-rCN.xml" />
 	    	 
