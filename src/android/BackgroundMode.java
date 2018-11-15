@@ -126,7 +126,7 @@ public class BackgroundMode extends CordovaPlugin {
         HMSAgent.connect(cordova.getActivity(), new ConnectHandler() {
             @Override
             public void onConnect(int rst) {
-                VVServer.WriteLog(cordova.getActivity(),"HMS connect end:" + rst);
+                VVServer.WriteLog(mActivity,"HMS connect end:" + rst);
             }
         });
         getToken();
