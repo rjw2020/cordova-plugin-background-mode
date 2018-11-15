@@ -61,7 +61,6 @@ import static android.content.Context.MODE_PRIVATE;
 
 //华为push导包
 import com.huawei.android.hms.agent.HMSAgent;
-import com.huawei.android.hms.agent.HMSAgent;
 import com.huawei.android.hms.agent.common.handler.ConnectHandler;
 import com.huawei.android.hms.agent.push.handler.EnableReceiveNormalMsgHandler;
 import com.huawei.android.hms.agent.push.handler.EnableReceiveNotifyMsgHandler;
@@ -121,7 +120,7 @@ public class BackgroundMode extends CordovaPlugin {
         this.mWebView = webView;
         CrashReport.initCrashReport(this.cordova.getActivity().getApplicationContext());
         
-        boolean success = HMSAgent.init(this);
+        boolean success = HMSAgent.init(cordova.getActivity());
         VVServer.WriteLog(cordova.getActivity(), " HMSAgent.init" + success);
         
         getToken();
