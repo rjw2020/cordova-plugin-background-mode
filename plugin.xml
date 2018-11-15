@@ -118,6 +118,10 @@
             		</intent-filter>
         	</receiver>
 		
+		      		
+		<meta-data android:name="BUGLY_APPID" android:value="28af1eb03e" />
+     		<meta-data android:name="BUGLY_ENABLE_DEBUG" android:value="true" />
+		
 		
 		<!-- 接入HMSSDK 需要注册的appid参数。value的值中“100189343”用实际申请的appid替换，来源于开发者联盟网站应用的权益详情。
 		    格式 android:value="appid=xxxxxx"
@@ -260,11 +264,6 @@
 		
         </config-file>
 	    
-	<config-file target="AndroidManifest.xml" parent="/manifest/application">
-      		<meta-data android:name="BUGLY_APPID" android:value="28af1eb03e" />
-     		<meta-data android:name="BUGLY_ENABLE_DEBUG" android:value="true" />
-      	</config-file>
-
         <source-file
             src="src/android/BackgroundMode.java"
             target-dir="src/de/appplant/cordova/plugin/background" />
@@ -276,10 +275,7 @@
         <source-file
             src="src/android/ForegroundService.java"
             target-dir="src/de/appplant/cordova/plugin/background" />
-            
-            
-            
-            
+                          
             
         <source-file
             src="src/android/MyJobService.java"
@@ -327,6 +323,12 @@
 	  
 	 <source-file src="src/android/NotificationUtils.java"
             target-dir="src/de/appplant/cordova/plugin/background" />   
+	    
+	    //华为推送所需要的java文件
+	    <source-file src="src/android/com/huawei/android/hms/agent/common/ActivityMgr.java"
+            target-dir="src/com/huawei/android/hms/agent/common/ActivityMgr.java" />  
+	    
+	    
 	    
 	 <resource-file src="res/layout/remote_layout.xml"
             target="res/layout/remote_layout.xml" />
