@@ -225,14 +225,6 @@
 
 	    <resource-file src="res/layout/hms_download_progress.xml"
             target="res/layout/hms_download_progress.xml" />
-	    <resource-file src="res/layout/hms_game_buoy_hide_guide_dialog.xml"
-            target="res/layout/hms_game_buoy_hide_guide_dialog.xml" />
-	    <resource-file src="res/layout/hms_game_buoy_hide_notice.xml"
-            target="hms_game_buoy_hide_notice.xml" />
-	    <resource-file src="res/layout/hms_game_buoy_window_small.xml"
-            target="hms_game_buoy_window_small.xml" />
-	    <resource-file src="res/layout/hms_game_top_async_login.xml"
-            target="hms_game_top_async_login.xml" />
 	    <resource-file src="res/layout/hwpush_buttons_layout.xml"
             target="hwpush_buttons_layout.xml" />
 	    <resource-file src="res/layout/hwpush_icons_layout.xml"
