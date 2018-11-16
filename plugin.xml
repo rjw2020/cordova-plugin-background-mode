@@ -207,7 +207,7 @@
 			    Receive push message (registration, push message, push connection state) broadcast.
 			    This receiver class requires the developer to create and inherit the com.huawei.hms.support.api.push.PushReceiver class.
 			    Reference to class in sample code: Com.huawei.hmsagent.HuaweiPushRevicer-->
-		<receiver android:name="VvHuaWeiPushTestReceiver" >
+		<receiver android:name="com.huawei.android.hms.agent.common.VvHuaWeiPushTestReceiver" >
 		    <intent-filter>
 			<!-- 必须,用于接收token | Must， for receiving token -->
 			<action android:name="com.huawei.android.push.intent.REGISTRATION" />
