@@ -120,6 +120,8 @@ public class BackgroundMode extends CordovaPlugin {
         this.mWebView = webView;
         CrashReport.initCrashReport(this.cordova.getActivity().getApplicationContext());
         
+        VVServer.WriteLog(cordova.getActivity(),"getPackageName:"+cordova.getActivity().getPackageName());
+        
         boolean success = HMSAgent.init(cordova.getActivity());
         VVServer.WriteLog(cordova.getActivity(), " HMSAgent.init：" + success);
              
