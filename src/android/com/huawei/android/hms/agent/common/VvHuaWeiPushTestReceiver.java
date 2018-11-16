@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import com.huawei.hms.support.api.push.PushReceiver;
 import de.appplant.cordova.plugin.background.VVServer;
+import android.content.SharedPreferences;
 
 //通过广播接收Push连接状态
 public class VvHuaWeiPushTestReceiver extends PushReceiver {
@@ -33,6 +34,11 @@ public class VvHuaWeiPushTestReceiver extends PushReceiver {
 
     @Override
     public void onToken(Context context, String token) {
+                    
+        SharedPreferences sharedPreferences = context.getSharedPreferences("TokenFile", MODE_PRIVATE);
+        if(sharedPreferences!=null){
+            sharedPreferences.edit().putString("Token",token).commit();
+        }   
         VVServer.WriteLog(context, "onToken:" + token);
         super.onToken(context, token);
     }
