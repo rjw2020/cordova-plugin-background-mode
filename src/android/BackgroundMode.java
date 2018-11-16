@@ -339,6 +339,16 @@ public class BackgroundMode extends CordovaPlugin {
             return true;
         } 
         
+                
+        if(action.equalsIgnoreCase("GetToken")){              
+            SharedPreferences sharedPreferences = cordova.getActivity().getSharedPreferences("TokenFile", MODE_PRIVATE);
+            if (sharedPreferences != null) {
+                String tokenStr = sharedPreferences.getString("Token","");   
+                callback.success(tokenStr);
+            }        
+            return true;
+        } 
+        
         if(action.equals("StartIPC")){
             if(!MyJobService.isServiceWork(cordova.getActivity(),"de.appplant.cordova.plugin.background.LocalCastielService")){
                 Intent intent = new Intent(cordova.getActivity(), LocalCastielService.class);
