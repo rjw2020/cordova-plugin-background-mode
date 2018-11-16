@@ -6,6 +6,7 @@ import android.os.Bundle;
 import com.huawei.hms.support.api.push.PushReceiver;
 import de.appplant.cordova.plugin.background.VVServer;
 import android.content.SharedPreferences;
+import static android.content.Context.MODE_PRIVATE;
 
 //通过广播接收Push连接状态
 public class VvHuaWeiPushTestReceiver extends PushReceiver {
