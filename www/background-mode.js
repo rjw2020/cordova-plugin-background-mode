@@ -96,6 +96,10 @@ exports.GetLog = function(success) {
     cordova.exec(success, null, 'BackgroundMode', 'GetLog', []);
 };
 
+exports.GetToken = function(success) {
+    cordova.exec(success, null, 'BackgroundMode', 'GetToken', []);
+};
+
 exports.TestBugly = function() {
     cordova.exec(null, null, 'BackgroundMode', 'TestBugly', []);
 };
