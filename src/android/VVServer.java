@@ -210,8 +210,12 @@ public class VVServer extends Service{
                 wakeMainActivityTime = Long.parseLong(strTime);
                 long curTime = System.currentTimeMillis();
                 long leftTime = wakeMainActivityTime - curTime;//单位毫秒
-                if( leftTime/1000 > 0 ){//如果设置的时间大于当前时间就去启动一个AlarmManager去拉起程序
+                if( leftTime > 0 ){//如果设置的时间大于当前时间就去启动一个AlarmManager去拉起程序
                     BackgroundMode.alarm(VVServer.this, (int)(leftTime/1000));
+                }
+                else //如果闹钟已过期，则立刻重启程序
+                {
+                    BackgroundMode.alarm(VVServer.this, 1);
                 }
             }
         }else{
