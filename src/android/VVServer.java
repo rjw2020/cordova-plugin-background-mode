@@ -210,6 +210,9 @@ public class VVServer extends Service{
                 wakeMainActivityTime = Long.parseLong(strTime);
                 long curTime = System.currentTimeMillis();
                 long leftTime = wakeMainActivityTime - curTime;//单位毫秒
+                
+                WriteLog(VVServer.this, "Clock time:" + strTime + ", left time:" + Long.toString(leftTime) + "\n");
+                
                 if( leftTime > 0 ){//如果设置的时间大于当前时间就去启动一个AlarmManager去拉起程序
                     BackgroundMode.alarm(VVServer.this, (int)(leftTime/1000));
                 }
