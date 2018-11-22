@@ -86,6 +86,7 @@ NSString* const kAPPBackgroundEventDeactivate = @"deactivate";
  */
 - (void) enable:(CDVInvokedUrlCommand*)command
 {
+   return;//ios禁用后台运行功能，因为用到了常驻通知会被appstore否决
     if (enabled)
         return;
 
