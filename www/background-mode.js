@@ -147,7 +147,7 @@ exports.joinQQGroupPage = function(arg0) {
 };
 
 exports.goToJoinQqGroup  = function() {
-    cordova.exec(null, null, 'BackgroundMode', 'goToJoinQqGroup', []);
+    cordova.exec(null, null, 'BackgroundMode', 'goToJoinQqGroup_IOS', []);
 };
 
 //获取手机的信息
