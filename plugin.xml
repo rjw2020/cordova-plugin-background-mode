@@ -42,7 +42,7 @@
             </feature>
         </config-file>
  
-
+        <!--
         <config-file target="*-Info.plist" parent="UIBackgroundModes">
             <array>
                 <string>audio</string>
@@ -50,7 +50,7 @@
         </config-file> 
 
         <resource-file src="appbeep.wav" />
-        
+        -->        
 
         <header-file src="src/ios/APPBackgroundMode.h" />
         <source-file src="src/ios/APPBackgroundMode.m" />
