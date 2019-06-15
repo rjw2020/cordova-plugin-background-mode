@@ -120,7 +120,7 @@ public class BackgroundMode extends CordovaPlugin {
         this.mWebView = webView;
         CrashReport.initCrashReport(this.cordova.getActivity().getApplicationContext());
         
-        VVServer.WriteLog(cordova.getActivity(),"getPackageName:"+cordova.getActivity().getPackageName());
+        //VVServer.WriteLog(cordova.getActivity(),"getPackageName:"+cordova.getActivity().getPackageName());
         
         if(Build.MANUFACTURER.equals("HUAWEI") || Build.MANUFACTURER.equals("HONOR")){
             boolean success = HMSAgent.init(cordova.getActivity());
@@ -146,12 +146,12 @@ public class BackgroundMode extends CordovaPlugin {
      * 获取token
      */
     private void getToken() {
-        VVServer.WriteLog(cordova.getActivity(),"get token: begin");
+        //VVServer.WriteLog(cordova.getActivity(),"get token: begin");
         HMSAgent.Push.getToken(new GetTokenHandler() {
             @Override
             public void onResult(int rtnCode)//, TokenResult tokenResult) {
             {
-                VVServer.WriteLog(cordova.getActivity(),"get token: end" + rtnCode);
+               // VVServer.WriteLog(cordova.getActivity(),"get token: end" + rtnCode);
             }
         });
     }
@@ -160,11 +160,11 @@ public class BackgroundMode extends CordovaPlugin {
      * 获取push状态 | Get Push State
      */
     private void getPushStatus() {
-        VVServer.WriteLog(cordova.getActivity(),"getPushState:begin");
+        //VVServer.WriteLog(cordova.getActivity(),"getPushState:begin");
         HMSAgent.Push.getPushState(new GetPushStateHandler() {
             @Override
             public void onResult(int rst) {
-                VVServer.WriteLog(cordova.getActivity(),"getPushState:end code=" + rst);
+                //VVServer.WriteLog(cordova.getActivity(),"getPushState:end code=" + rst);
             }
         });
     }
@@ -174,11 +174,11 @@ public class BackgroundMode extends CordovaPlugin {
      * @param enable 是否开启 | enabled or not
      */
     private void setReceiveNormalMsg(boolean enable){
-        VVServer.WriteLog(cordova.getActivity(),"enableReceiveNormalMsg:begin");
+        //VVServer.WriteLog(cordova.getActivity(),"enableReceiveNormalMsg:begin");
         HMSAgent.Push.enableReceiveNormalMsg(enable, new EnableReceiveNormalMsgHandler() {
             @Override
             public void onResult(int rst) {
-                VVServer.WriteLog(cordova.getActivity(),"enableReceiveNormalMsg:end code=" + rst);
+                //VVServer.WriteLog(cordova.getActivity(),"enableReceiveNormalMsg:end code=" + rst);
             }
         });
     }
@@ -188,11 +188,11 @@ public class BackgroundMode extends CordovaPlugin {
      * @param enable 是否开启 | enabled or not
      */
     private void setReceiveNotifyMsg(boolean enable){
-        VVServer.WriteLog(cordova.getActivity(),"enableReceiveNotifyMsg:begin");
+        //VVServer.WriteLog(cordova.getActivity(),"enableReceiveNotifyMsg:begin");
         HMSAgent.Push.enableReceiveNotifyMsg(enable, new EnableReceiveNotifyMsgHandler() {
             @Override
             public void onResult(int rst) {
-                VVServer.WriteLog(cordova.getActivity(),"enableReceiveNotifyMsg:end code=" + rst);
+                //VVServer.WriteLog(cordova.getActivity(),"enableReceiveNotifyMsg:end code=" + rst);
             }
         });
     }
