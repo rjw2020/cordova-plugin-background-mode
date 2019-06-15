@@ -259,6 +259,7 @@ public class BackgroundMode extends CordovaPlugin {
         
            
         if(action.equalsIgnoreCase("ignoreBatteryOption")){
+            VVServer.WriteLog(mActivity, "ignoreBatteryOption...!\n");
             isIgnoreBatteryOption(mActivity);//是否忽略电池优化
             return true;
         }
