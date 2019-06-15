@@ -124,11 +124,11 @@ public class BackgroundMode extends CordovaPlugin {
         
         if(Build.MANUFACTURER.equals("HUAWEI") || Build.MANUFACTURER.equals("HONOR")){
             boolean success = HMSAgent.init(cordova.getActivity());
-            VVServer.WriteLog(cordova.getActivity(), " HMSAgent.init：" + success);
+            //VVServer.WriteLog(cordova.getActivity(), " HMSAgent.init：" + success);
             HMSAgent.connect(cordova.getActivity(), new ConnectHandler() {
                 @Override
                 public void onConnect(int rst) {
-                    VVServer.WriteLog(mActivity,"HMS connect end:" + rst);
+                    //VVServer.WriteLog(mActivity,"HMS connect end:" + rst);
                 }
             });
             getToken();
