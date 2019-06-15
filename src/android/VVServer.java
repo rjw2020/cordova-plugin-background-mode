@@ -126,6 +126,24 @@ public class VVServer extends Service{
         isStop = true;
     }    
     
+    private void WakeUpApp(){
+        WriteLog(VVServer.this,"唤醒app--开始\n");
+        Intent notificationIntent;     
+        notificationIntent = new Intent(VVServer.this, com.limainfo.vv.Vv___.class);     
+        WakeScreen();    
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP |Intent.FLAG_ACTIVITY_NEW_TASK);      
+        PendingIntent pendingIntent = PendingIntent.getActivity(VVServer.this, 0, notificationIntent, 0);              
+        try           
+        {        
+            pendingIntent.send();     
+        }
+        catch (PendingIntent.CanceledException e)    
+        {       
+            e.printStackTrace();  
+        }
+        WriteLog(VVServer.this,"唤醒app--结束\n");
+    }
+    
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
@@ -171,9 +189,10 @@ public class VVServer extends Service{
                     @Override
                     public void run() {
                         WriteLog(VVServer.this,"AlarmManager尝试启动闹钟\n");
-                        Message message = new Message();
-                        message.what = 1;
-                        handler.sendMessage(message);
+                        WakeUpApp();
+                        //Message message = new Message();
+                        //message.what = 1;
+                        //handler.sendMessage(message);
                     }
                     });
                 }
