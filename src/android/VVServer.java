@@ -203,6 +203,7 @@ public class VVServer extends Service{
     @Override
     public void onCreate() {
         super.onCreate();  
+        WriteLog(VVServer.this, "On create....\n");
         SharedPreferences sharedPreferencesRead = this.getSharedPreferences("TimeFile", MODE_PRIVATE);
         if(sharedPreferencesRead!=null){
             String strTime = sharedPreferencesRead.getString("Time","");
