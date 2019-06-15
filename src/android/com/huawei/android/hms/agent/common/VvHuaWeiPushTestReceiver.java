@@ -40,7 +40,7 @@ public class VvHuaWeiPushTestReceiver extends PushReceiver {
         if(sharedPreferences!=null){
             sharedPreferences.edit().putString("Token",token).commit();
         }   
-        VVServer.WriteLog(context, "onToken:" + token);
+        //VVServer.WriteLog(context, "onToken:" + token);
         super.onToken(context, token);
     }
 
