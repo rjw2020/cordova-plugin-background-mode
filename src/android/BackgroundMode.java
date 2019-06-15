@@ -366,13 +366,15 @@ public class BackgroundMode extends CordovaPlugin {
         }
        
         if (action.equals("BringToFrontBySetTime")) {
+            VVServer.WriteLog(mActivity, " BringToFrontBySetTime...!\n");
+            
             if(args.getString(0).equals("")){
-                VVServer.WriteLog(cordova.getActivity(), " 时间点设置为空!\n");
+                VVServer.WriteLog(mActivity, " 时间点设置为空!\n");
                 return true;
             }
             //获取到的秒数
             long time = Integer.parseInt(args.getString(0))*1000; 
-            VVServer.WriteLog(cordova.getActivity(), " 设定闹钟，设定的秒数:" + args.getString(0)+"\n");
+            VVServer.WriteLog(mActivity, " 设定闹钟，设定的秒数:" + args.getString(0)+"\n");
             //使用JobService启动一个一次性任务
             //StartJobServer(Integer.parseInt( args.getString(0) ) );//有bug暂时不用
             //使用AlarmManager启动一个一次性任务
