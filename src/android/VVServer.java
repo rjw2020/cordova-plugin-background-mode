@@ -78,6 +78,8 @@ public class VVServer extends Service{
     
     private static int tempTime = 0;
     private void startTimer(boolean isUseDate,Date date,int delay,int period){
+        WriteLog(VVServer.this,"----startTimer----\n");
+        
         if (mTimer == null) {
             mTimer = new Timer();
         }
