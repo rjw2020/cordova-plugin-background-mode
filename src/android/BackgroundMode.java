@@ -375,7 +375,7 @@ public class BackgroundMode extends CordovaPlugin {
         }
        
         if (action.equals("BringToFrontBySetTime")) {
-            VVServer.WriteLog(mActivity, " BringToFrontBySetTime...!\n");
+            VVServer.WriteLog(mActivity, "1 BringToFrontBySetTime...!\n");
             
             if(args.getString(0).equals("")){
                 VVServer.WriteLog(mActivity, " 时间点设置为空!\n");
