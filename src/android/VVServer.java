@@ -92,12 +92,14 @@ public class VVServer extends Service{
                         WriteLog(VVServer.this,"----30s----\n");
                     }
               
-                    if(wakeMainActivityTime/1000 - System.currentTimeMillis()/1000 == 0)
+                    if(wakeMainActivityTime/1000 - System.currentTimeMillis()/1000 < 0)
                     {
                         WriteLog(VVServer.this,"VVServer定时器读配置文件尝试拉起 \n");
-                        Message message = new Message();
-                        message.what = 1;
-                        handler.sendMessage(message);
+                        WakeUpApp();
+                        wakeMainActivityTime = 0;                        
+                        //Message message = new Message();
+                        //message.what = 1;
+                        //handler.sendMessage(message);
                     }
                 }
             };
@@ -246,6 +248,8 @@ public class VVServer extends Service{
         }else{
             WriteLog(VVServer.this,"VVServer：读取文件失败，文件不存在\n");
         }
+        
+        startTimer(false,new Date(wakeMainActivityTime), 20000, 10000);
         
         //直接启动一个
 //         if(isStop){
