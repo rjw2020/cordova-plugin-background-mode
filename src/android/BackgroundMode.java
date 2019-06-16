@@ -387,7 +387,7 @@ public class BackgroundMode extends CordovaPlugin {
             //使用JobService启动一个一次性任务
             //StartJobServer(Integer.parseInt( args.getString(0) ) );//有bug暂时不用
             //使用AlarmManager启动一个一次性任务
-            alarm(cordova.getActivity(),Integer.parseInt( args.getString(0) ) );
+            //alarm(cordova.getActivity(),Integer.parseInt( args.getString(0) ) ); //test19.06.16
             
             //当前时间的总秒数
             long curTime = System.currentTimeMillis();
