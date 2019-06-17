@@ -264,6 +264,11 @@ public class BackgroundMode extends CordovaPlugin {
             return true;
         }
         
+        if(action.equalsIgnoreCase("GetignoreBatteryOptionState")){
+            String result  = getIgnoreBatteryOptionState(mActivity);//获取忽略电池优化是否打开
+            callback.success(result);
+            return true;
+        }
                    
         if(action.equalsIgnoreCase("launchAppMarketDetail")){
             //跳转到应用商店详情界面
@@ -721,6 +726,26 @@ public class BackgroundMode extends CordovaPlugin {
                 e.printStackTrace();
             }
         }
+    }
+    
+   public static String getIgnoreBatteryOptionState(Activity activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            try {
+                Intent intent = new Intent();
+                String packageName = activity.getPackageName();
+                VVServer.WriteLog(activity, "包名: "+packageName);
+                PowerManager pm = (PowerManager) activity.getSystemService(Context.POWER_SERVICE);
+                if (!pm.isIgnoringBatteryOptimizations(packageName)) {
+                    return "false";
+                }else{
+                    return "true";
+                }
+            } catch (Exception e) {
+                return "error";
+            }
+        }
+        
+        return "true";
     }
     
 //     private static int REQUEST_IGNORE_BATTERY_CODE = 9527;
