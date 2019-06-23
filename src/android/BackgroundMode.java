@@ -709,7 +709,7 @@ public class BackgroundMode extends CordovaPlugin {
      * @param activity
      */
     public static void isIgnoreBatteryOption(Activity activity) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+       // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             try {
                 Intent intent = new Intent();
                 String packageName = activity.getPackageName();
@@ -725,7 +725,7 @@ public class BackgroundMode extends CordovaPlugin {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
+      //  }
     }
     
    public static String getIgnoreBatteryOptionState(Activity activity) {
