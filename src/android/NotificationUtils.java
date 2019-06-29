@@ -21,7 +21,7 @@ import java.io.InputStream;
  * Created by loi on 2018/5/31.
  */
 
-public class NotificationUtils {
+public class NotificationUtils11111111111111 {
     public static NotificationManager mNotificationManager = null;
     public static NotificationChannel mNotificationChannel = null;//重要的通知渠道
     public static NotificationChannel mNotificationChannelDefault = null;//普通的通知渠道
