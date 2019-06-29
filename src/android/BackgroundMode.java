@@ -203,7 +203,7 @@ public class BackgroundMode extends CordovaPlugin {
         
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             //VVServer.WriteLog(cordova.getActivity(), " Android 8.0 startForegroundService");
-            cordova.getActivity().startForegroundService(new Intent(cordova.getActivity(),VVServer.class));
+            //cordova.getActivity().startForegroundService(new Intent(cordova.getActivity(),VVServer.class));//comment 19.06.30
         }else {
             VVServer.WriteLog(cordova.getActivity(), " 低版本启动服务");
             cordova.getActivity().startService(new Intent(cordova.getActivity(), VVServer.class));//程序启动的时候就启动vvservice服务    
