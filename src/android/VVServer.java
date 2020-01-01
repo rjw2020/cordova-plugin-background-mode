@@ -52,7 +52,7 @@ public class VVServer extends Service{
     private AssistServiceConnection mConnection;
     private Timer timer;
     private int curLeftTime;
-    public static long wakeMainActivityTime = 1000;//全局变量
+    public static long wakeMainActivityTime = 0;//全局变量
     private static boolean isOpenDebugModel = false;
     private Class<?> mClass = null;
     
@@ -92,7 +92,7 @@ public class VVServer extends Service{
                         WriteLog(VVServer.this,"----30s----\n");
                     }
               
-                    if(wakeMainActivityTime/1000 - System.currentTimeMillis()/1000 < 0)
+                    if (wakeMainActivityTime > 0 && (wakeMainActivityTime/1000 - System.currentTimeMillis()/1000 < 0))
                     {
                         WriteLog(VVServer.this,"waketime:" + wakeMainActivityTime + ", curTime:" + System.currentTimeMillis() + ", VVServer定时器读配置文件尝试拉起 \n");
                         WakeUpApp();
