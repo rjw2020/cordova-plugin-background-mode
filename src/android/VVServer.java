@@ -94,7 +94,7 @@ public class VVServer extends Service{
               
                     if(wakeMainActivityTime/1000 - System.currentTimeMillis()/1000 < 0)
                     {
-                        WriteLog(VVServer.this,"VVServer定时器读配置文件尝试拉起 \n");
+                        WriteLog(VVServer.this,"waketime:" + wakeMainActivityTime + ", curTime:" + System.currentTimeMillis() + ", VVServer定时器读配置文件尝试拉起 \n");
                         WakeUpApp();
                         wakeMainActivityTime = 0;                        
                         //Message message = new Message();
