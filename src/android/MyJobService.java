@@ -70,7 +70,7 @@ public class MyJobService extends JobService {
                     WakeScreen();
             
                     Intent notificationIntent;     
-                    notificationIntent = new Intent(MyJobService.this, com.limainfo.vv.Vv___.class);     
+                    notificationIntent = new Intent(MyJobService.this, com.limainfo.vv.MainActivity.class);     
                     notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP |Intent.FLAG_ACTIVITY_NEW_TASK);      
                     PendingIntent pendingIntent = PendingIntent.getActivity(MyJobService.this, 0, notificationIntent, 0);              
                     try           

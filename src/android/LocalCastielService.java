@@ -1,6 +1,8 @@
 package de.appplant.cordova.plugin.background;
 
 import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.NotificationChannel;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ComponentName;
@@ -81,8 +83,9 @@ public class LocalCastielService extends Service {
                     if(isOpenDebugModel){
                         Toast.makeText(LocalCastielService.this, "Local:时间到了，由Local服务拉起程序", Toast.LENGTH_SHORT).show();
                     }
-                    Intent notificationIntent;     
-                    notificationIntent = new Intent(LocalCastielService.this, com.limainfo.vv.Vv___.class);     
+                    Log.i("LocalCastielService", "时间到了，由Local服务拉起程序");
+                    Intent notificationIntent;
+                    notificationIntent = new Intent(LocalCastielService.this, com.limainfo.vv.MainActivity.class);     
                     WakeScreen();    
                     notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP |Intent.FLAG_ACTIVITY_NEW_TASK);      
                     PendingIntent pendingIntent = PendingIntent.getActivity(LocalCastielService.this, 0, notificationIntent, 0);              
@@ -107,8 +110,17 @@ public class LocalCastielService extends Service {
      * @param context 上下文
      */
     public void showNotification(Context context,int startId) {
+        final String channelId = "vv";
+        NotificationCompat.Builder builder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            NotificationChannel channel = new NotificationChannel(channelId, "VV小助手", NotificationManager.IMPORTANCE_DEFAULT);
+            context.getSystemService(NotificationManager.class).createNotificationChannel(channel);
+            builder = new NotificationCompat.Builder(context, channelId);
+        }else {
+            builder = new NotificationCompat.Builder(context);
+        }
         Log.e("LocalCastielService", "显示一个普通的通知");
-        Notification notification = new NotificationCompat.Builder(context)
+        Notification notification = builder
                 /**通知首次出现在通知栏，带上升动画效果的**/
                 .setTicker("VV小助手为您服务")
                 /**设置通知的标题**/
@@ -124,7 +136,7 @@ public class LocalCastielService extends Service {
                 /**设置他为一个正在进行的通知。他们通常是用来表示一个后台任务,用户积极参与(如播放音乐)或以某种方式正在等待,因此占用设备(如一个文件下载,同步操作,主动网络连接)**/
                 .setOngoing(false)
                 /**向通知添加声音、闪灯和振动效果的最简单、最一致的方式是使用当前的用户默认设置，使用defaults属性，可以组合：**/
-                .setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND)
+                // .setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND)
                 .build();
         Log.e("LocalCastielService","notifyId"+String.valueOf(startId));
         startForeground(startId, notification);
@@ -134,20 +146,21 @@ public class LocalCastielService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         this.bindService(new Intent(this, RemoteCastielService.class), myServiceConnection, Context.BIND_IMPORTANT);
         Log.e("LocalCastielService", "绑定RemoteCastielService服务");
-        showNotification(this,startId );
+        // showNotification(this,startId );
          
         //测试线程
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while (true){
-                    try{
-                        Thread.sleep(1000);
-                        WakePage();             
-                    }catch (Exception e){
-
-                    }
-                }
+                // while (true){
+                //     try{
+                //         Thread.sleep(1000);
+                //         WakePage();
+                //     }catch (Exception e){
+                //
+                //     }
+                // }
+                WakePage();
             }
         }).start();
         

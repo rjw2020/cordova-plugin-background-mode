@@ -210,21 +210,28 @@ public class NotificationUtils {
      */
     public static void sendNotification(Context context,int importance,int icon, String title, String content,String innerContent, int notificationId,PendingIntent pendingIntent){
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){//8.0及以上系统
+            if (mNotificationManager==null){
+                mNotificationManager = context.getSystemService(NotificationManager.class);
+            }
+            if (mNotificationManager.getNotificationChannel(channelIdDefault) == null){
+                NotificationChannel channel = new NotificationChannel(channelIdDefault, "Vv小秘书", importance);
+                mNotificationManager.createNotificationChannel(channel);
+            }
             mNotificationBuilder = new NotificationCompat.Builder(context,channelIdDefault);
         }else {//8.0以下系统
             mNotificationBuilder = new NotificationCompat.Builder(context);
         }
 
-        if(mNotificationBuilder!=null){
+        if(pendingIntent!=null){
             mNotificationBuilder.setContentIntent(pendingIntent);
         }
-        if(title!=null){
+        if(title!=null && !title.equals("null")){
             mNotificationBuilder.setContentTitle(title);//必须设置
         }
-        if(content!=null){
+        if(content!=null  && !content.equals("null")){
             mNotificationBuilder.setContentText(content);////必须设置
         }
-        if(innerContent!=null){
+        if(innerContent!=null && !innerContent.equals("null")){
             mNotificationBuilder.setSubText(innerContent);
         }
         if(icon == -1){

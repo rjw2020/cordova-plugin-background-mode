@@ -43,7 +43,7 @@ public class AutoStartBroadcastReceiver extends BroadcastReceiver {
             Class<?> mClass;
             try {   
                 if(classinfo != null){
-                    mClass = Class.forName("com.limainfo.vv.Vv___");  
+                    mClass = Class.forName("com.limainfo.vv.MainActivity");  
                     Intent notificationIntent;
                     notificationIntent = new Intent(context, mClass);
                     notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);

@@ -23,7 +23,7 @@ import android.app.AlarmManager;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.os.IBinder;
+import android.os.*;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -36,13 +36,16 @@ import org.apache.cordova.CordovaWebView;
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPreferences;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
 import android.widget.Toast;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.app.PendingIntent;
 import android.net.Uri;
-import android.os.Build;
 import android.provider.Settings;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
@@ -50,6 +53,9 @@ import android.util.Log;
 import android.content.SharedPreferences;
 import android.view.WindowManager;
 import android.text.TextUtils;
+import android.content.pm.PackageManager;
+import android.content.pm.ApplicationInfo;
+
 
 import android.app.NotificationManager;
 import android.os.PowerManager;
@@ -141,7 +147,9 @@ public class BackgroundMode extends CordovaPlugin {
             VVServer.WriteLog(cordova.getActivity(), " initialize");
         
     }
-    
+
+    private final String TAG = this.getClass().getSimpleName();
+
         /**
      * 获取token
      */
@@ -152,6 +160,7 @@ public class BackgroundMode extends CordovaPlugin {
             public void onResult(int rtnCode)//, TokenResult tokenResult) {
             {
                // VVServer.WriteLog(cordova.getActivity(),"get token: end" + rtnCode);
+                Log.i(TAG,"华为token: "+rtnCode );
             }
         });
     }
@@ -434,12 +443,17 @@ public class BackgroundMode extends CordovaPlugin {
                 return false;
             }
         }
-        
+
+        if (action.equals("sendNotificationForTime")){
+            sendNotificationForTime(callback, args);
+            return true;
+        }
+
         if(action.equals("sendNotification")){
             VVServer.WriteLog(cordova.getActivity(), " 发送通知Start");
             Intent mintent = null;
             try {
-                mintent = new Intent(mActivity, Class.forName("com.limainfo.vv.Vv___"));
+                mintent = new Intent(mActivity, Class.forName("com.limainfo.vv.MainActivity"));
             } catch (ClassNotFoundException e) {
                 VVServer.WriteLog(cordova.getActivity(), " 发送通知错误"+e.toString());
                 e.printStackTrace();
@@ -482,7 +496,7 @@ public class BackgroundMode extends CordovaPlugin {
         if(action.equals("setNotificationButtonClickIntent")){
             VVServer.WriteLog(cordova.getActivity(), " 更改按钮意图Start");
             try {
-                Intent mintent = new Intent(mActivity, Class.forName("com.limainfo.vv.Vv___"));
+                Intent mintent = new Intent(mActivity, Class.forName("com.limainfo.vv.MainActivity"));
                 mintent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP| Intent.FLAG_ACTIVITY_NEW_TASK);
                 PendingIntent mPendingIntent = PendingIntent.getActivity(cordova.getActivity(), 0, mintent, 0);
                 NotificationUtils.setButtonIntent(cordova.getActivity(),mPendingIntent);
@@ -510,11 +524,51 @@ public class BackgroundMode extends CordovaPlugin {
             callback.success(getMobileInfo());
             return true;
         }
-        
+
+        if(action.equals("isDebuggable")){
+            if(isPackageDebuggable()) callback.success();
+            else callback.error("not debuggable");
+            return true;
+        }
+
         BackgroundExt.execute(this, action, callback);
         return true;
     }
-    
+
+    private void sendNotificationForTime(CallbackContext callback, JSONArray args) throws JSONException {
+        JSONObject json = args.getJSONObject(0);
+        String content = json.optString("content");
+        long time = json.optLong("time");
+        int voiceRemindStatus = json.optInt("voiceRemindStatus");
+        if (content.equals("") || time <= 0) {
+            callback.error("参数错误");
+            return;
+        }
+        Context context = cordova.getActivity();
+        AlarmManager am = (AlarmManager) context.getSystemService(cordova.getActivity().ALARM_SERVICE);
+        Intent intent = new Intent(context, VVServer.class);
+        intent.setAction(VVServer.ACTION_NOTIFICATION);
+        intent.putExtra("content", content);
+        intent.putExtra("voiceRemindStatus", voiceRemindStatus);
+        PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        if (!mPendingIntents.contains(pendingIntent)){
+            Log.w(TAG, "sendNotificationForTime: " + json.toString());
+            am.setExact(AlarmManager.RTC_WAKEUP, time, pendingIntent);
+            mPendingIntents.add(pendingIntent);
+        }
+        callback.success();
+        Log.d(TAG, "sendNotificationForTime: "+ mPendingIntents);
+    }
+
+    public static HashSet<PendingIntent> mPendingIntents = new HashSet<PendingIntent>();
+
+    private void cancelAlarm(){
+        for (PendingIntent mPendingIntent : mPendingIntents) {
+            (cordova.getActivity().getSystemService(AlarmManager.class)).cancel(mPendingIntent);
+        }
+        mPendingIntents.clear();
+    }
+
    private void test(String message, CallbackContext callbackContext) {
         this.cordova.getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -550,6 +604,7 @@ public class BackgroundMode extends CordovaPlugin {
     
       
     public static void alarm(Context context,int time){
+        Log.e("HLQ_Struggle", "设定闹钟，设定的秒数:" + time);
         AlarmManager am = (AlarmManager) context.getSystemService(context.ALARM_SERVICE);
         Intent intent = new Intent(context, VVServer.class);
         intent.setAction(VVServer.ACTION_ALARM);
@@ -908,6 +963,18 @@ public class BackgroundMode extends CordovaPlugin {
                 webView.loadUrl("javascript:" + js);
             }
         });
+    }
+
+    public boolean isPackageDebuggable() {
+        try {
+            PackageManager pm = cordova.getActivity().getPackageManager();
+            ApplicationInfo appInfo = pm.getApplicationInfo(cordova.getActivity().getPackageName(), 0);
+            return (appInfo.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+        } catch (PackageManager.NameNotFoundException e) {
+            // Application not found, handle exception
+            e.printStackTrace();
+            return false;
+        }
     }
 
 }

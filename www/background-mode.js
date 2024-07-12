@@ -19,9 +19,42 @@
     under the License.
 */
 
+cordova.define("cordova-plugin-background-mode.BackgroundMode", function(require, exports, module) {
 var exec    = require('cordova/exec'),
     channel = require('cordova/channel');
 
+
+exports._isDebugMode = false;
+exports.isDebugMode = function (){
+    return this._isDebugMode;
+}
+
+/**
+ * 在指定时间后发送通知
+ * @param args {Object} The arguments to send to the native side. text,content
+ */
+exports.sendNotificationForTime = function (args){
+    cordova.exec(null, null, 'BackgroundMode','sendNotificationForTime', [args]);
+};
+
+/**
+ * 重置预约的通知
+ */
+exports.resetNotificationForTime = function () {
+    cordova.exec(null, null, 'BackgroundMode', 'resetNotificationForTime', []);
+};
+
+exports.isDebugable = function () {
+    var that = this;
+    function successCallback(result) {
+        that._isDebugMode = result == 'OK';
+    }
+    function errorCallback(error) {
+        that._isDebugMode = false;
+        console.error('Error getting debuggable state:'+ error);
+    }
+    cordova.exec(successCallback, errorCallback, 'BackgroundMode', 'isDebuggable', []);
+};
 
 exports.GotoAutoStartManagerPage = function() {
     var fn = function() {
@@ -611,4 +644,7 @@ channel.deviceready.subscribe(function() {
     if (exports.isActive()) {
         exports.fireEvent('activate');
     }
+    exports.isDebugable();
+});
+
 });

@@ -1,6 +1,8 @@
 package de.appplant.cordova.plugin.background;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ComponentName;
@@ -9,6 +11,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
+import android.os.Build;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.RemoteException;
@@ -37,7 +40,6 @@ public class RemoteCastielService extends Service {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                Log.e("RemoteCastielService", "");
                 if(!MyJobService.isServiceWork(RemoteCastielService.this,"de.appplant.cordova.plugin.background.VVServer")){
                         Intent intent = new Intent(RemoteCastielService.this, VVServer.class);
                         RemoteCastielService.this.startService(intent);
@@ -57,10 +59,10 @@ public class RemoteCastielService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.e("RemoteCastielService", "启动LocalCastielService服务");
+        Log.e("RemoteCastielService", "启动LocalCastielService服务"+flags+" "+startId);
 //         Toast.makeText(RemoteCastielService.this, "启动LocalCastielService服务", Toast.LENGTH_LONG).show();
         this.bindService(new Intent(this,LocalCastielService.class), myServiceConnection, Context.BIND_IMPORTANT);
-        showNotification(RemoteCastielService.this,startId);
+        // showNotification(RemoteCastielService.this,startId);
         return START_STICKY;
     }
 
@@ -70,14 +72,26 @@ public class RemoteCastielService extends Service {
      * @param context 上下文
      */
     public void showNotification(Context context,int startId) {
+        final String channelId = "vv";
+        Notification.Builder builder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            NotificationChannel channel = new NotificationChannel(channelId, "VV小助手", NotificationManager.IMPORTANCE_DEFAULT);
+            context.getSystemService(NotificationManager.class).createNotificationChannel(channel);
+            builder = new Notification.Builder(context, channelId);
+        }else {
+            builder = new Notification.Builder(context);
+        }
+        Intent intent = new Intent(this, com.limainfo.vv.MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP |Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
         Log.e("RemoteCastielService", "显示一个普通的通知");
-        Notification notification = new NotificationCompat.Builder(context)
+        Notification notification = builder
                /**通知首次出现在通知栏，带上升动画效果的**/
                 .setTicker("远程服务")
                 /**设置通知的标题**/
-                .setContentTitle("守护服务")
+                .setContentTitle("VV小助手")
                 /**设置通知的内容**/
-                .setContentText("...")
+                .setContentText("VV小助手正在后台运行")
                 /**通知产生的时间，会在通知信息里显示**/
                 .setWhen(System.currentTimeMillis())
                 /**设置该通知优先级**/
@@ -87,7 +101,9 @@ public class RemoteCastielService extends Service {
                 /**设置他为一个正在进行的通知。他们通常是用来表示一个后台任务,用户积极参与(如播放音乐)或以某种方式正在等待,因此占用设备(如一个文件下载,同步操作,主动网络连接)**/
                 .setOngoing(false)
                 /**向通知添加声音、闪灯和振动效果的最简单、最一致的方式是使用当前的用户默认设置，使用defaults属性，可以组合：**/
-                .setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND)
+                // .setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND)
+                // .setContentIntent(pendingIntent)
+                .setFullScreenIntent(pendingIntent, true)
                 .build();
         Log.e("RemoteCastielService","notifyId"+String.valueOf(GRAY_SERVICE_ID));
         startForeground(GRAY_SERVICE_ID, notification);

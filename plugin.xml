@@ -24,13 +24,13 @@
     <engines>
         <engine name="cordova" version=">=3.0.0" />
         <engine name="android-sdk" version=">=16" />
-        <engine name="windows-sdk" version=">=10.0.14393.0" />
+        <!--<engine name="windows-sdk" version=">=10.0.14393.0" />-->
     </engines>
 
     <!-- js -->
     <js-module src="www/background-mode.js" name="BackgroundMode">
         <clobbers target="cordova.plugins.backgroundMode" />
-        <clobbers target="plugin.backgroundMode" />
+        <!--<clobbers target="plugin.backgroundMode" />-->
     </js-module>
 
     <!-- ios -->
@@ -62,11 +62,15 @@
     <platform name="android">
 	<lib-file src="src/android/libs/bugly_crash_release.jar" />
 	<lib-file src="src/android/libs/HMS_SDK_2.6.1.301.jar" />
+		<config-file parent="/manifest" target="AndroidManifest.xml">
+			<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+		</config-file>
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="BackgroundMode" >
                 <param name="android-package"
                       value="de.appplant.cordova.plugin.background.BackgroundMode"/>
             </feature>
+
         </config-file>
 
         <config-file target="res/xml/config.xml" parent="/*">
@@ -75,7 +79,6 @@
 
         <config-file target="AndroidManifest.xml" parent="/manifest/application">
             	<service android:name="de.appplant.cordova.plugin.background.ForegroundService" />
-                <!--一个像素的activity -->
                 <activity
 		    android:name="de.appplant.cordova.plugin.background.OnePiexlActivity"
 		    android:theme="@android:style/Theme.Translucent" 
@@ -122,7 +125,7 @@
 		
 		      		
 		<meta-data android:name="BUGLY_APPID" android:value="28af1eb03e" />
-     		<meta-data android:name="BUGLY_ENABLE_DEBUG" android:value="true" />
+			<meta-data android:name="BUGLY_ENABLE_DEBUG" android:value="false" />
 		
 		
 		<!-- 接入HMSSDK 需要注册的appid参数。value的值中“100189343”用实际申请的appid替换，来源于开发者联盟网站应用的权益详情。

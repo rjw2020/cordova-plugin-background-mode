@@ -24,6 +24,7 @@ package de.appplant.cordova.plugin.background;
 import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.NotificationChannel;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
@@ -55,28 +56,22 @@ import static android.os.PowerManager.PARTIAL_WAKE_LOCK;
  */
 public class ForegroundService extends Service {
 
-    
-    private String TAG  = "ForegroundService";
-    private final int PID = android.os.Process.myPid();
-    private AssistServiceConnection mConnection;
-    
+
     // Fixed ID for the 'foreground' notification
     public static final int NOTIFICATION_ID = -574543954;
-
     // Default title of the background notification
     private static final String NOTIFICATION_TITLE =
             "App is running in background";
-
     // Default text of the background notification
     private static final String NOTIFICATION_TEXT =
             "Doing heavy tasks.";
-
     // Default icon of the background notification
     private static final String NOTIFICATION_ICON = "icon";
-
+    private final int PID = android.os.Process.myPid();
     // Binder given to clients
     private final IBinder mBinder = new ForegroundBinder();
-
+    private String TAG = "ForegroundService";
+    private AssistServiceConnection mConnection;
     // Partial wake lock to prevent the app from going to sleep when locked
     private PowerManager.WakeLock wakeLock;
 
@@ -84,20 +79,8 @@ public class ForegroundService extends Service {
      * Allow clients to call on to the service.
      */
     @Override
-    public IBinder onBind (Intent intent) {
+    public IBinder onBind(Intent intent) {
         return mBinder;
-    }
-
-    /**
-     * Class used for the client Binder.  Because we know this service always
-     * runs in the same process as its clients, we don't need to deal with IPC.
-     */
-    public class ForegroundBinder extends Binder {
-        ForegroundService getService() {
-            // Return this instance of ForegroundService
-            // so clients can call public methods
-            return ForegroundService.this;
-        }
     }
 
     /**
@@ -105,7 +88,7 @@ public class ForegroundService extends Service {
      * by the OS.
      */
     @Override
-    public void onCreate () {
+    public void onCreate() {
         super.onCreate();
         keepAwake();
     }
@@ -125,7 +108,7 @@ public class ForegroundService extends Service {
      */
     private void keepAwake() {
         JSONObject settings = BackgroundMode.getSettings();
-        boolean isSilent    = settings.optBoolean("silent", false);
+        boolean isSilent = settings.optBoolean("silent", false);
 
         if (!isSilent) {
             setForeground();
@@ -152,6 +135,10 @@ public class ForegroundService extends Service {
             wakeLock.release();
             wakeLock = null;
         }
+
+        if (mConnection != null) {
+            unbindService(mConnection);
+        }
     }
 
     /**
@@ -169,13 +156,13 @@ public class ForegroundService extends Service {
      * @param settings The config settings
      */
     private Notification makeNotification(JSONObject settings) {
-        String title    = settings.optString("title", NOTIFICATION_TITLE);
-        String text     = settings.optString("text", NOTIFICATION_TEXT);
+        String title = settings.optString("title", NOTIFICATION_TITLE);
+        String text = settings.optString("text", NOTIFICATION_TEXT);
         boolean bigText = settings.optBoolean("bigText", false);
 
         Context context = getApplicationContext();
-        String pkgName  = context.getPackageName();
-        Intent intent   = context.getPackageManager()
+        String pkgName = context.getPackageName();
+        Intent intent = context.getPackageManager()
                 .getLaunchIntentForPackage(pkgName);
 
         Notification.Builder notification = new Notification.Builder(context)
@@ -213,7 +200,7 @@ public class ForegroundService extends Service {
      *
      * @param settings The config settings
      */
-    protected void updateNotification (JSONObject settings) {
+    protected void updateNotification(JSONObject settings) {
         boolean isSilent = settings.optBoolean("silent", false);
 
         if (isSilent) {
@@ -248,11 +235,10 @@ public class ForegroundService extends Service {
      *
      * @param icon The name of the icon.
      * @param type The resource type where to look for.
-     *
      * @return The resource id or 0 if not found.
      */
     private int getIconResId(String icon, String type) {
-        Resources res  = getResources();
+        Resources res = getResources();
         String pkgName = getPackageName();
 
         int resId = res.getIdentifier(icon, type, pkgName);
@@ -268,7 +254,7 @@ public class ForegroundService extends Service {
      * Set notification color if its supported by the SDK.
      *
      * @param notification A Notification.Builder instance
-     * @param settings A JSON dict containing the color definition (red: FF0000)
+     * @param settings     A JSON dict containing the color definition (red: FF0000)
      */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void setColor(Notification.Builder notification,
@@ -293,9 +279,8 @@ public class ForegroundService extends Service {
     private NotificationManager getNotificationManager() {
         return (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
     }
-    
-    
-        public void setForeground() {
+
+    public void setForeground() {
         // sdk < 18 , 直接调用startForeground即可,不会在通知栏创建通知
         if (Build.VERSION.SDK_INT < 18) {
             this.startForeground(PID, getNotification());
@@ -308,6 +293,54 @@ public class ForegroundService extends Service {
 
         this.bindService(new Intent(this, AssistServiceTwo.class), mConnection,
                 Service.BIND_AUTO_CREATE);
+    }
+
+    private Notification getNotification() {
+        String channelId = "default";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            getNotificationManager().createNotificationChannel(new NotificationChannel(channelId, "ForegroundService", NotificationManager.IMPORTANCE_DEFAULT));
+        }
+        PendingIntent pendingIntent = null;
+        try {
+            Class<?> aClass = Class.forName("com.limainfo.vv.MainActivity");
+            Intent intent = new Intent(this, aClass);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+        }catch (Exception e){
+            Log.e(TAG, "getNotification: ", e);
+        }
+
+        Notification notification = new Notification.Builder(this)
+                .setContentTitle("Vv小助手")
+                /**设置通知的内容**/
+                .setContentText("Vv小助手正在后台运行")
+                /**通知产生的时间，会在通知信息里显示**/
+                .setWhen(System.currentTimeMillis())
+                /**设置该通知优先级**/
+                .setPriority(Notification.PRIORITY_DEFAULT)
+                /**设置这个标志当用户单击面板就可以让通知将自动取消**/
+                .setAutoCancel(true)
+                /**设置他为一个正在进行的通知。他们通常是用来表示一个后台任务,用户积极参与(如播放音乐)或以某种方式正在等待,因此占用设备(如一个文件下载,同步操作,主动网络连接)**/
+                .setOngoing(false)
+                /**向通知添加声音、闪灯和振动效果的最简单、最一致的方式是使用当前的用户默认设置，使用defaults属性，可以组合：**/
+                // .setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND)
+                .setChannelId(channelId)
+                .setFullScreenIntent(pendingIntent, true)
+                .build();
+
+        return notification;
+    }
+
+    /**
+     * Class used for the client Binder.  Because we know this service always
+     * runs in the same process as its clients, we don't need to deal with IPC.
+     */
+    public class ForegroundBinder extends Binder {
+        ForegroundService getService() {
+            // Return this instance of ForegroundService
+            // so clients can call public methods
+            return ForegroundService.this;
+        }
     }
 
     private class AssistServiceConnection implements ServiceConnection {
@@ -332,35 +365,6 @@ public class ForegroundService extends Service {
             ForegroundService.this.unbindService(mConnection);
             mConnection = null;
         }
-    }
-
-    private Notification getNotification() {
-        // 定义一个notification
-//        Notification notification = new Notification();
-//        Intent notificationIntent = new Intent(this, MainActivity.class);
-//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
-//        notification.setLatestEventInfo(this, "My title", "My content",
-//                pendingIntent);
-
-
-        Notification notification = new NotificationCompat.Builder(ForegroundService.this)
-                .setContentTitle("保活服务")
-                /**设置通知的内容**/
-                .setContentText("点击跳转到MainActivity")
-                /**通知产生的时间，会在通知信息里显示**/
-                .setWhen(System.currentTimeMillis())
-                /**设置该通知优先级**/
-                .setPriority(Notification.PRIORITY_DEFAULT)
-                /**设置这个标志当用户单击面板就可以让通知将自动取消**/
-                .setAutoCancel(true)
-                /**设置他为一个正在进行的通知。他们通常是用来表示一个后台任务,用户积极参与(如播放音乐)或以某种方式正在等待,因此占用设备(如一个文件下载,同步操作,主动网络连接)**/
-                .setOngoing(false)
-                /**向通知添加声音、闪灯和振动效果的最简单、最一致的方式是使用当前的用户默认设置，使用defaults属性，可以组合：**/
-                .setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND)
-                .build();
-//  .setContentIntent(PendingIntent.getActivity(ForegroundService.this, 2, new Intent(ForegroundService.this, com.phonegap.helloworld.VV_KeppAlive_demo.class), PendingIntent.FLAG_CANCEL_CURRENT))
-               
-        return notification;
     }
 
 }
