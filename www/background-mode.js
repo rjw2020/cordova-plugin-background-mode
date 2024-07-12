@@ -19,7 +19,7 @@
     under the License.
 */
 
-cordova.define("cordova-plugin-background-mode.BackgroundMode", function(require, exports, module) {
+// cordova.define("cordova-plugin-background-mode.BackgroundMode", function(require, exports, module) {
 var exec    = require('cordova/exec'),
     channel = require('cordova/channel');
 
@@ -647,4 +647,4 @@ channel.deviceready.subscribe(function() {
     exports.isDebugable();
 });
 
-});
+// });
