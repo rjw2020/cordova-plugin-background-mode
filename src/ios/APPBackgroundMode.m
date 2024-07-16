@@ -48,9 +48,9 @@ NSString* const kAPPBackgroundEventDeactivate = @"deactivate";
 - (void) pluginInitialize
 {
     enabled = NO;
-    /*[self configureAudioPlayer];
+    [self configureAudioPlayer];
     [self configureAudioSession];
-    [self observeLifeCycle]; */
+    [self observeLifeCycle];
 }
 
 /**
@@ -86,7 +86,7 @@ NSString* const kAPPBackgroundEventDeactivate = @"deactivate";
  */
 - (void) enable:(CDVInvokedUrlCommand*)command
 {
-   return;//ios禁用后台运行功能，因为用到了常驻通知会被appstore否决
+    // return;//ios禁用后台运行功能，因为用到了常驻通知会被appstore否决
     if (enabled)
         return;
 
