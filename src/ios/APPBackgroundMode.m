@@ -235,7 +235,8 @@ NSString* const kAPPBackgroundEventDeactivate = @"deactivate";
  */
 + (BOOL) isRunningWebKit
 {
-    return IsAtLeastiOSVersion(@"8.0") && NSClassFromString(@"CDVWKWebViewEngine");
+    //  !NSClassFromString(@"CDVWKProcessPoolFactory");  没有安装 cordova-plugin-ionic-webview 这个插件时执行
+    return IsAtLeastiOSVersion(@"8.0") && NSClassFromString(@"CDVWKWebViewEngine") && !NSClassFromString(@"CDVWKProcessPoolFactory");
 }
 
 /**
